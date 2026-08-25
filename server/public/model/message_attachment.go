@@ -4,6 +4,7 @@
 package model
 
 import (
+	"encoding/json"
 	"fmt"
 	"reflect"
 	"regexp"
@@ -92,9 +93,10 @@ func (s *MessageAttachment) IsValid() error {
 
 	// float64 is included because encoding/json decodes every JSON number into a
 	// float64 for an any field, so a ts that arrived over the wire is never an int64.
+	// json.Number covers callers of this module that decode with UseNumber.
 	if s.Timestamp != nil {
 		switch s.Timestamp.(type) {
-		case string, int64, float64:
+		case string, int64, float64, json.Number:
 			// Valid types
 		default:
 			multiErr = multierror.Append(multiErr, fmt.Errorf("timestamp must be either a string or a number"))
