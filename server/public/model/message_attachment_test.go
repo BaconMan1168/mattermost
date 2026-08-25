@@ -4,9 +4,11 @@
 package model
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestMessageAttachment_IsValid(t *testing.T) {
@@ -104,7 +106,7 @@ func TestMessageAttachment_IsValid(t *testing.T) {
 			attachment: &MessageAttachment{
 				Timestamp: []string{"invalid"},
 			},
-			wantErr: "timestamp must be either a string or int64",
+			wantErr: "timestamp must be either a string or a number",
 		},
 		"valid timestamp string": {
 			attachment: &MessageAttachment{
@@ -166,6 +168,14 @@ func TestMessageAttachment_IsValid(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestMessageAttachment_IsValid_NumericTimestampFromJSON(t *testing.T) {
+	var attachment MessageAttachment
+	require.NoError(t, json.Unmarshal([]byte(`{"text": "hello", "ts": 1787650119}`), &attachment))
+
+	require.IsType(t, float64(0), attachment.Timestamp, "encoding/json decodes a JSON number into float64 for an any field")
+	assert.NoError(t, attachment.IsValid())
 }
 
 func TestParseMessageAttachment(t *testing.T) {
