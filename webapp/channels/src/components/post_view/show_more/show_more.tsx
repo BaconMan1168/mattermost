@@ -7,7 +7,6 @@ import {FormattedMessage} from 'react-intl';
 export type AttachmentTextOverflowType = 'ellipsis';
 
 const MAX_POST_HEIGHT = 600;
-const MARGIN_CHANGE_FOR_COMPACT_POST = 12;
 
 type Props = {
     children?: React.ReactNode;
@@ -16,7 +15,6 @@ type Props = {
     isRHSExpanded: boolean;
     isRHSOpen: boolean;
     text?: string;
-    compactDisplay: boolean;
     overflowType?: AttachmentTextOverflowType;
     maxHeight?: number;
 };
@@ -107,7 +105,6 @@ export default class ShowMore extends React.PureComponent<Props, State> {
         const {
             children,
             isAttachmentText,
-            compactDisplay,
             overflowType,
         } = this.props;
 
@@ -128,12 +125,6 @@ export default class ShowMore extends React.PureComponent<Props, State> {
 
         let attachmentTextOverflow = null;
         if (isOverflow) {
-            if (!isAttachmentText && isCollapsed && compactDisplay) {
-                if (collapsedMaxHeightStyle) {
-                    collapsedMaxHeightStyle -= MARGIN_CHANGE_FOR_COMPACT_POST;
-                }
-            }
-
             let showIcon = 'fa fa-angle-up';
             let showText = (
                 <FormattedMessage

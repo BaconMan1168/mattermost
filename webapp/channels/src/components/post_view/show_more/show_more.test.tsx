@@ -16,7 +16,6 @@ describe('components/post_view/ShowMore', () => {
         isRHSOpen: false,
         maxHeight: 200,
         text: 'text',
-        compactDisplay: false,
     };
 
     test('should match snapshot', () => {
@@ -103,21 +102,6 @@ describe('components/post_view/ShowMore', () => {
             <ShowMore
                 {...baseProps}
                 overflowType='ellipsis'
-                ref={ref}
-            />,
-        );
-        act(() => {
-            ref.current?.setState({isOverflow: true, isCollapsed: false});
-        });
-        expect(container).toMatchSnapshot();
-    });
-
-    test('should match snapshot, PostMessageView on expanded view with compactDisplay', () => {
-        const ref = React.createRef<ShowMore>();
-        const {container} = renderWithContext(
-            <ShowMore
-                {...baseProps}
-                compactDisplay={true}
                 ref={ref}
             />,
         );
